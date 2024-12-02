@@ -626,6 +626,53 @@ void executeOrderProcessing(ros::NodeHandle &nh, ros::ServiceClient &ik_client, 
     }
 }
 
+void publishTrajectory(const sensor_msgs::JointState& joint_states,ros::Publisher& trajectory_pub) {
+    trajectory_msgs::JointTrajectory joint_trajectory;
+
+    // Nombres de las juntas
+    joint_trajectory.joint_names = {
+        "linear_arm_actuator_joint", "shoulder_pan_joint", "shoulder_lift_joint",
+        "elbow_joint", "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"
+    };
+
+    // Configurar un punto intermedio
+    trajectory_msgs::JointTrajectoryPoint point;
+    point.positions.resize(joint_trajectory.joint_names.size());
+
+    // Establecer posiciones iniciales desde `joint_states`
+    for (size_t t_joint = 0; t_joint < joint_trajectory.joint_names.size(); ++t_joint) {
+        for (size_t s_joint = 0; s_joint < joint_states.name.size(); ++s_joint) {
+            if (joint_trajectory.joint_names[t_joint] == joint_states.name[s_joint]) {
+                point.positions[t_joint] = joint_states.position[s_joint];
+                break;
+            }
+        }
+    }
+
+    // Modificar el ángulo del codo (elbow_joint, índice 3)
+    point.positions[3] += 0.1; // Ajustar en 0.1 radianes
+
+    // Configurar el actuador lineal
+    point.positions[0] = joint_states.position[1];
+
+    // Establecer el tiempo de duración del movimiento
+    point.time_from_start = ros::Duration(0.25);
+
+    // Agregar el punto a la trayectoria
+    joint_trajectory.points.push_back(point);
+
+    // Configurar el encabezado del mensaje
+    static int count = 0;
+    joint_trajectory.header.seq = count++;
+    joint_trajectory.header.stamp = ros::Time::now();
+    joint_trajectory.header.frame_id = "arm1_base_link";
+
+    // Publicar la trayectoria
+    ROS_INFO("Publicando trayectoria...");
+    trajectory_pub.publish(joint_trajectory);
+}
+
+
 int main(int argc, char **argv){
 
     // Initialize ROS
