@@ -626,20 +626,21 @@ void executeOrderProcessing(ros::NodeHandle &nh, ros::ServiceClient &ik_client, 
     }
 }
 
-void publishTrajectory(const sensor_msgs::JointState& joint_states,ros::Publisher& trajectory_pub) {
+
+void publishTrajectory(const sensor_msgs::JointState& joint_states, ros::Publisher& trajectory_pub) {
     trajectory_msgs::JointTrajectory joint_trajectory;
 
-    // Nombres de las juntas
+    // 定义关节的名称
     joint_trajectory.joint_names = {
         "linear_arm_actuator_joint", "shoulder_pan_joint", "shoulder_lift_joint",
         "elbow_joint", "wrist_1_joint", "wrist_2_joint", "wrist_3_joint"
     };
 
-    // Configurar un punto intermedio
+    // 配置中间点
     trajectory_msgs::JointTrajectoryPoint point;
     point.positions.resize(joint_trajectory.joint_names.size());
 
-    // Establecer posiciones iniciales desde `joint_states`
+    // 从 joint_states 中设置初始位置
     for (size_t t_joint = 0; t_joint < joint_trajectory.joint_names.size(); ++t_joint) {
         for (size_t s_joint = 0; s_joint < joint_states.name.size(); ++s_joint) {
             if (joint_trajectory.joint_names[t_joint] == joint_states.name[s_joint]) {
@@ -649,26 +650,26 @@ void publishTrajectory(const sensor_msgs::JointState& joint_states,ros::Publishe
         }
     }
 
-    // Modificar el ángulo del codo (elbow_joint, índice 3)
-    point.positions[3] += 0.1; // Ajustar en 0.1 radianes
+    // 修改肘部关节（elbow_joint，第3个关节）的角度
+    point.positions[3] += 0.1; // 调整角度增加 0.1 弧度
 
-    // Configurar el actuador lineal
+    // 设置线性执行器的位置
     point.positions[0] = joint_states.position[1];
 
-    // Establecer el tiempo de duración del movimiento
+    // 设置运动的持续时间
     point.time_from_start = ros::Duration(0.25);
 
-    // Agregar el punto a la trayectoria
+    // 将点添加到轨迹中
     joint_trajectory.points.push_back(point);
 
-    // Configurar el encabezado del mensaje
+    // 配置消息的头部
     static int count = 0;
     joint_trajectory.header.seq = count++;
     joint_trajectory.header.stamp = ros::Time::now();
     joint_trajectory.header.frame_id = "arm1_base_link";
 
-    // Publicar la trayectoria
-    ROS_INFO("Publicando trayectoria...");
+    // 发布轨迹
+    ROS_INFO("发布轨迹...");
     trajectory_pub.publish(joint_trajectory);
 }
 
