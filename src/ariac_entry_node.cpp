@@ -657,7 +657,7 @@ void publishTrajectory(const sensor_msgs::JointState& joint_states, ros::Publish
     point.positions[0] = joint_states.position[1];
 
     // 设置运动的持续时间
-    point.time_from_start = ros::Duration(0.25);
+    point.time_from_start = ros::Duration(0.5);
 
     // 将点添加到轨迹中
     joint_trajectory.points.push_back(point);
