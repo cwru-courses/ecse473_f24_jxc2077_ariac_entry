@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
   ik_service
   roscpp
   rviz
-  actionlib
   message_generation
   std_msgs
 )
@@ -138,7 +137,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/ariac_entry_node.cpp)
-add_executable(${PROJECT_NAME}_node src/start_competition.cpp)
+add_executable(${PROJECT_NAME}_node src/ariac_entry_node.cpp)
 
 
 ## Rename C++ executable without prefix

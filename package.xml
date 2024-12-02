@@ -53,14 +53,17 @@
   <build_depend>ik_service</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rviz</build_depend>
+  <build_depend>std_srvs</build_depend>
   <build_export_depend>ecse_373_ariac</build_export_depend>
   <build_export_depend>ik_service</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rviz</build_export_depend>
+  <build_export_depend>std_srvs</build_export_depend>
   <exec_depend>ecse_373_ariac</exec_depend>
   <exec_depend>ik_service</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rviz</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -1,4 +1,10 @@
 <launch>
-    <include file="$(find ecse_373_ariac)/launch/ecse_373_ariac.launch"/>
-    <node name="ariac_entry_node" type="ariac_entry_node" pkg="ariac_entry" output="screen"/>
+    <arg name="use_sim_time" default="true"/>
+    <!-- launch simulation in ariac -->
+    <include file="$(find ecse_373_ariac)/launch/ecse_373_ariac.launch"/> 
+
+    <include file="$(find ik_service)/launch/ik_service.launch"/>
+
+    <!-- launch the node of competition -->
+    <node pkg="ariac_entry" name="ariac_entry_node"  type="ariac_entry_node" output="screen"/>
 </launch>
