@@ -1,0 +1,4 @@
+<launch>
+    <include file="$(find ecse_373_ariac)/launch/ecse_373_ariac.launch"/>
+    <node name="ariac_entry_node" type="ariac_entry_node" pkg="ariac_entry" output="screen"/>
+</launch>
